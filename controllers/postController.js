@@ -1,10 +1,19 @@
 // importo il file posts.js della cartella data
-const posts = require('../data/posts');
+// const posts = require('../data/posts');
 
-// logica index
+// Importiamo il file di connessione al database
+const connection = require('../data/db');
+
+// Index
 function index(req, res) {
-    res.json(posts);
-};
+    // prepariamo la query
+    const sql = 'SELECT * FROM posts';
+    // eseguiamo la query!
+    connection.query(sql, (err, results) => {
+    if (err) return res.status(500).json({ error: 'Database query failed' });
+    res.json(results);
+    });
+}
 
 // logica show
 function show(req, res) {
