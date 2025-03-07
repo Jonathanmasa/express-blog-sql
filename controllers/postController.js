@@ -17,12 +17,16 @@ function index(req, res) {
 
 // logica show
 function show(req, res) {
-    // recupero l'ID dell'URL e lo trasformo in numero
-    const id = parseInt(req.params.id);
-    // cerco il post tramide ID
-    const post = posts.find(post => post.id === id);
-    // restituiscoin formato json
-    res.json(post);
+    // recuperiamo l'id dall' URL
+    const id = req.params.id
+
+    const sql = 'SELECT * FROM posts WHERE id = ?';
+    connection.query(sql, [id], (err, results) => {
+
+        if (err) return res.status(500).json({ error: 'Database query failed' });
+        if (results.length === 0) return res.status(404).json({ error: 'post not found' });
+        res.json(results[0]);
+    });
 };
 
 // logica store
